@@ -7,7 +7,7 @@ pipeline {
         }
     }
     environment {
-        DOCKERHUB_CRED = credentials('docker-cred')
+        DOCKERHUB_CRED = 'docker-cred'
     }
     stages {
         stage('Code-Checkout') {
@@ -35,8 +35,8 @@ pipeline {
             steps {
                 script {
                     sh 'pwd'
-                    def customImage = docker.withRegistry( 'https://index.docker.io/v1/', DOCKERHUB_CRED ) {
-                        customImage.push()
+                    custom = docker.withRegistry( '', DOCKERHUB_CRED ) {
+                        custom.push()
                     }
                 }
             }
