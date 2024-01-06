@@ -35,9 +35,8 @@ pipeline {
             steps {
                 script {
                     sh 'pwd'
-                    docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CRED) {
-                            def customImage = docker.image('schets14/myimages:spring-ms.v1')
-                            customImage.push()
+                    def customImage = docker.withRegistry( 'https://index.docker.io/v1/', DOCKERHUB_CRED ) {
+                        customImage.push()
                     }
                 }
             }
