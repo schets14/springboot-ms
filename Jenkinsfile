@@ -27,19 +27,12 @@ pipeline {
             steps {
                 script {
                     docker.build('schets14/myimages:spring-ms.v1', '.')
+                    sh 'docker login -u"schets14" -p"8989Solche"'
+                    def img = 'schets14/myimages:spring-ms.v1'
+                    img.push()
                 }
             }
         }
 
-        stage('Push to Docker Hub') {
-            steps {
-                script {
-                    sh 'pwd'
-                    custom = docker.withRegistry( '', DOCKERHUB_CRED ) {
-                        custom.push()
-                    }
-                }
-            }
-        }
     }
 }
