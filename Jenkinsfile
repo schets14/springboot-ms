@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'maven:eclipse-temurin:11-jdk-alpine' // Specify the Maven version you need
+            image 'maven:latest' // Specify the Maven version you need
             args '-u root' // Mount the Maven cache for caching dependencies
         }
     }
