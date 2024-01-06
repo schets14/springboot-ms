@@ -1,6 +1,9 @@
 pipeline {
-    agent docker
-
+    agent {
+        docker {
+            image 'maven:latest' // Specify the Maven version you need
+        }
+    }
     stages {
         stage('Code-Checkout') {
             steps {
