@@ -2,6 +2,7 @@ pipeline {
     agent {
         docker {
             image 'maven:latest' // Specify the Maven version you need
+            args '-v $HOME/.m2:/root/.m2' // Mount the Maven cache for caching dependencies
         }
     }
     stages {
