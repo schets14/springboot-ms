@@ -20,13 +20,13 @@ pipeline {
             }
         }
         stages {
-            stage('Docker-Image') {
+            stage('BUILD and PUSH') {
                 environments {
                     DOCKER_IMAGE = "schets14/myimages:${BUILD_NUMBER}"
                     DOCKERHUB_CRED = credentials('docker-cred')
                 }
                 steps {
-                    sh 'pwd'
+                    sh 'pwd's
                     sh 'docker build -t ${DOCKER_IMAGE} .'
                     def dockerImage = docker.image("${DOCKER_IMAGE}")
                     docker.withRegistry('https://registry.hub.docker.com', DOCKERHUB_CRED) {
