@@ -5,6 +5,9 @@ pipeline {
             args '-u root' // Mount the Maven cache for caching dependencies
         }
     }
+    environment {
+        DOCKERHUB_CRED = credentials('docker-cred')
+    }
     stages {
         stage('Code-Checkout') {
             steps {
@@ -19,18 +22,21 @@ pipeline {
                 sh 'mvn clean install'
             }
         }
-        stages {
-            stage('BUILD and PUSH') {
-                environments {
-                    DOCKER_IMAGE = "schets14/myimages:${BUILD_NUMBER}"
-                    DOCKERHUB_CRED = credentials('docker-cred')
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    docker.build('schets14/myimages:spring-ms.v1', '.')
                 }
-                steps {
-                    sh 'pwd's
-                    sh 'docker build -t ${DOCKER_IMAGE} .'
-                    def dockerImage = docker.image("${DOCKER_IMAGE}")
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+                script {
+                    sh 'pwd'
                     docker.withRegistry('https://registry.hub.docker.com', DOCKERHUB_CRED) {
-                        dockerImage.push()
+                            def customImage = docker.image('schets14/myimages:spring-ms.v1')
+                            customImage.push()
                     }
                 }
             }
