@@ -1,8 +1,9 @@
 pipeline {
     agent {
         docker {
-            image 'maven:latest' // Specify the Maven version you need
+            image 'abhishekf5/maven-abhishek-docker-agent:v1' // Specify the Maven version you need
             args '-u root' // Mount the Maven cache for caching dependencies
+            args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
     environment {
