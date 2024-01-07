@@ -7,7 +7,7 @@ pipeline {
         }
     }
     environment {
-        DOCKERHUB_CRED = 'docker-cred'
+        DOCKERHUB_CRED = 'dockerhub'
         registry = 'schets14/myimages'
         dockerImage = ''
     }
