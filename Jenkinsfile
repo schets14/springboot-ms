@@ -45,7 +45,7 @@ pipeline {
                 }
             }
         }
-        stages('Updating Deployment file'){
+        stage('Updating Deployment file'){
             steps{
                 sh '''
                     pwd
