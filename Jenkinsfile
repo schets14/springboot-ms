@@ -47,7 +47,8 @@ pipeline {
         }
         stage('Updating Deployment file'){
             steps{
-                sh '''
+                withCredentials([string(credentialsId: 'GITHUB_TOKEN', variable: 'GITHUB_T')]) {
+                    sh '''
                     pwd
                     git config user.email "schets14@gmail.com"
                     git config user.name "Chetan Solanki"
@@ -55,8 +56,9 @@ pipeline {
                     sed -i "s/replaceImageTag/$BUILD_NUMBER/g" deployment.yaml
                     git add deployment.yaml
                     git commit -m "Update deployment image to version $BUILD_NUMBER"
-                    git push https://$GITHUB_TOKEN@github.com/$GIT_USER_NAME/$GIT_REPO_NAME HEAD:main
+                    git push https://$GITHUB_T@github.com/$GIT_USER_NAME/$GIT_REPO_NAME HEAD:main
                 '''
+                }
             }
 
         }
