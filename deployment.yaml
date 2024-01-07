@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: shipping-ms-container
-        image: schets14/myimages:replaceImageTag # Replace with your actual Docker image name and tag
+        image: schets14/myimages:36 # Replace with your actual Docker image name and tag
         ports:
         - containerPort: 8080 # Replace with the port your application exposes
