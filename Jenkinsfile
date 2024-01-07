@@ -8,6 +8,8 @@ pipeline {
     }
     environment {
         DOCKERHUB_CRED = 'dockerhubid'
+        registry = 'schets14/myimages'
+        dockerImage = ''
     }
     stages {
         stage('Code-Checkout') {
@@ -23,12 +25,21 @@ pipeline {
                 sh 'mvn clean install'
             }
         }
-        stage('Build Docker Image') {
-            steps {
+        stage('Building image') {
+            steps{
                 script {
-                    docker.build('schets14/myimages:spring-ms.v1', '.')
-                    //def img = 'schets14/myimages:spring-ms.v1'
-                    sh 'docker push schets14/myimages:spring-ms.v1'
+                    echo 'building image'
+                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                }
+            }
+        }
+        stage('Pushing image') {
+            steps{
+                script {
+                    echo 'pushing image on repo'
+                    docker.withRegistry('', DOCKERHUB_CRED) {
+                        dockerImage.push()
+                    }
                 }
             }
         }
