@@ -12,10 +12,6 @@ pipeline {
         dockerImage = ''
         GIT_REPO_NAME = 'springboot-ms'
         GIT_USER_NAME = 'schets14'
-        PREVIOUS_BUILD_NUMBER = script {
-                    def previousBuild = currentBuild.getPreviousBuild()
-                    return previousBuild ? previousBuild.getNumber().toString() : 'N/A'
-                }
     }
     stages {
         stage('Code-Checkout') {
