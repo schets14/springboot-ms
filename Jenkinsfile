@@ -12,12 +12,25 @@ pipeline {
         dockerImage = ''
         GIT_REPO_NAME = 'springboot-ms'
         GIT_USER_NAME = 'schets14'
+        PREVIOUS_BUILD_NUMBER = 'N/A'
     }
     stages {
         stage('Code-Checkout') {
             steps {
                 echo 'Checking out code from git repo'
                 git url: 'https://github.com/schets14/springboot-ms.git', branch: 'main'
+            }
+        }
+        stage('Set Previous Build Number') {
+            environment {
+                // Use the script block to execute Groovy code
+                PREVIOUS_BUILD_NUMBER = script {
+                    def previousBuild = currentBuild.getPreviousBuild()
+                    return previousBuild ? previousBuild.getNumber().toString() : 'N/A'
+                }
+            }
+            steps {
+                echo "Previous Completed Build Number: ${PREVIOUS_BUILD_NUMBER}"
             }
         }
         stage('Build') {
