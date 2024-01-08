@@ -47,8 +47,11 @@ pipeline {
         }
         stage('Updating Deployment file'){
             steps{
-                withCredentials([string(credentialsId: 'GITHUB_TOKEN', variable: 'GITHUB_T')]) {
+                script {
                     def previousBuildNumber = currentBuild.getPreviousBuild()?.getNumber() ?: 0
+                    echo "Previous Completed Build Number: ${previousBuildNumber}"
+                }
+                withCredentials([string(credentialsId: 'GITHUB_TOKEN', variable: 'GITHUB_T')]) {
                     sh '''
                     pwd
                     git config user.email "schets14@gmail.com"
