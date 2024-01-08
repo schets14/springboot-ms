@@ -46,11 +46,14 @@ pipeline {
             }
         }
         stage('Updating Deployment file'){
-            steps{
+            environment {
+                // Use the script block to execute Groovy code
                 PREVIOUS_BUILD_NUMBER = script {
-                    def previousBuildNumber = currentBuild.getPreviousBuild()?.getNumber() ?: 0
-                    echo "Previous Completed Build Number: ${previousBuildNumber}"
+                    def previousBuild = currentBuild.getPreviousBuild()
+                    return previousBuild ? previousBuild.getNumber().toString() : 'N/A'
                 }
+            }
+            steps{
                 withCredentials([string(credentialsId: 'GITHUB_TOKEN', variable: 'GITHUB_T')]) {
                     sh '''
                     pwd
