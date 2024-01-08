@@ -50,7 +50,7 @@ pipeline {
                 script {
                     def previousBuildNumber = currentBuild.getPreviousBuild()?.getNumber() ?: 0
                     echo "Previous Completed Build Number: ${previousBuildNumber}"
-                    sh 'sed -i "s/$previousBuildNumber/$BUILD_NUMBER/g" deployment.yaml'
+                    sh "sed -i \"s/${previousBuildNumber}/$BUILD_NUMBER/g\" deployment.yaml"
                 }
                 withCredentials([string(credentialsId: 'GITHUB_TOKEN', variable: 'GITHUB_T')]) {
                     sh '''
