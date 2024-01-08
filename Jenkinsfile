@@ -47,6 +47,10 @@ pipeline {
         }
         stage('Updating Deployment file'){
             steps{
+                script {
+                    def previousBuildNumber = currentBuild.getPreviousBuild()?.getNumber() ?: 0
+                    echo "Previous Completed Build Number: ${previousBuildNumber}"
+                }
                 withCredentials([string(credentialsId: 'GITHUB_TOKEN', variable: 'GITHUB_T')]) {
                     sh '''
                     pwd
@@ -54,8 +58,8 @@ pipeline {
                     git config user.email "schets14@gmail.com"
                     git config user.name "Chetan Solanki"
                     BUILD_NUMBER=$BUILD_NUMBER
-                    echo $PREVIOUS_BUILD_NUMBER
-                    sed -i "s/$PREVIOUS_BUILD_NUMBER/$BUILD_NUMBER/g" deployment.yaml
+                    echo ${previousBuildNumber}
+                    sed -i "s/${previousBuildNumber}/$BUILD_NUMBER/g" deployment.yaml
                     git add deployment.yaml
                     git commit -m "Update deployment image to version $BUILD_NUMBER"
                     git push https://$GITHUB_T@github.com/$GIT_USER_NAME/$GIT_REPO_NAME HEAD:main
