@@ -54,6 +54,7 @@ pipeline {
                 withCredentials([string(credentialsId: 'GITHUB_TOKEN', variable: 'GITHUB_T')]) {
                     sh '''
                     pwd
+                    echo "${previousBuildNumber}"
                     git config user.email "schets14@gmail.com"
                     git config user.name "Chetan Solanki"
                     BUILD_NUMBER=$BUILD_NUMBER
