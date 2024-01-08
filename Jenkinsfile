@@ -50,7 +50,7 @@ pipeline {
                 script {
                     def previousBuildNumber = currentBuild.getPreviousBuild()?.getNumber() ?: 0
                     echo "Previous Completed Build Number: ${previousBuildNumber}"
-                }
+    
                 withCredentials([string(credentialsId: 'GITHUB_TOKEN', variable: 'GITHUB_T')]) {
                     sh '''
                     pwd
@@ -64,6 +64,7 @@ pipeline {
                     git commit -m "Update deployment image to version $BUILD_NUMBER"
                     git push https://$GITHUB_T@github.com/$GIT_USER_NAME/$GIT_REPO_NAME HEAD:main
                 '''
+                }
                 }
             }
 
