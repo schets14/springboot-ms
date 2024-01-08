@@ -12,25 +12,12 @@ pipeline {
         dockerImage = ''
         GIT_REPO_NAME = 'springboot-ms'
         GIT_USER_NAME = 'schets14'
-        PREVIOUS_BUILD_NUMBER = 'N/A'
     }
     stages {
         stage('Code-Checkout') {
             steps {
                 echo 'Checking out code from git repo'
                 git url: 'https://github.com/schets14/springboot-ms.git', branch: 'main'
-            }
-        }
-        stage('Set Previous Build Number') {
-            environment {
-                // Use the script block to execute Groovy code
-                PREVIOUS_BUILD_NUMBER = script {
-                    def previousBuild = currentBuild.getPreviousBuild()
-                    return previousBuild ? previousBuild.getNumber().toString() : 'N/A'
-                }
-            }
-            steps {
-                echo "Previous Completed Build Number: ${PREVIOUS_BUILD_NUMBER}"
             }
         }
         stage('Build') {
@@ -59,18 +46,17 @@ pipeline {
             }
         }
         stage('Updating Deployment file'){
-            environment {
-                // Use the script block to execute Groovy code
-                PREVIOUS_BUILD_NUMBER = script {
-                    def previousBuild = currentBuild.getPreviousBuild()
-                    return previousBuild ? previousBuild.getNumber().toString() : 'N/A'
-                }
-            }
             steps{
+                script {
+                    def previousBuildNumber = currentBuild.getPreviousBuild()?.getNumber() ?: 0
+                    echo "Previous Completed Build Number: ${previousBuildNumber}"
+                    previousbn = ${previousBuildNumber}
+                    echo "$previousbn"
+                }
                 withCredentials([string(credentialsId: 'GITHUB_TOKEN', variable: 'GITHUB_T')]) {
                     sh '''
                     pwd
-                    echo "$PREVIOUS_BUILD_NUMBER"
+                    echo "${previousBuildNumber}"
                     git config user.email "schets14@gmail.com"
                     git config user.name "Chetan Solanki"
                     BUILD_NUMBER=$BUILD_NUMBER
