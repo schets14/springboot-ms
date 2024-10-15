@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: shipping-ms
 spec:
-  replicas: 4 # Number of desired replicas (pods)
+  replicas: 1 # Number of desired replicas (pods)
   selector:
     matchLabels:
       app: shipping-ms
